@@ -565,6 +565,47 @@
   .ex-step .ex-svg { max-width: 138px; }
   .ex-step-cap { margin-top: 0.2rem; }
 
+  .ex-table-wrap { overflow-x: auto; margin: 0.6rem 0 0.2rem; }
+  .ex-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    min-width: 340px;
+  }
+  .ex-table th, .ex-table td {
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .ex-table th {
+    background: rgba(0,229,255,0.06);
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .ex-table td { color: var(--text); }
+  .ex-table tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+  .ex-table .ex-visit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 5px;
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+  }
+  .ex-table .ex-found { color: var(--tag-graph-text); font-weight: 700; }
+  .ex-table .ex-dim { color: var(--muted); }
+  .ex-table-cap {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin: 0.5rem 0 0.2rem;
+  }
+
   /* Footer */
   footer {
     position: relative;
@@ -799,6 +840,18 @@ int main() {
       </div>
       <div class="ex-note">BFS uses a <b>queue</b> — visit start, then all its neighbours, then their neighbours (level by level). Assuming neighbours are taken in increasing order:</div>
       <div class="ex-order"><span class="ex-chip">0</span><span class="ex-arrow">&rarr;</span><span class="ex-chip">1</span><span class="ex-arrow">&rarr;</span><span class="ex-chip">2</span><span class="ex-arrow">&rarr;</span><span class="ex-chip">3</span><span class="ex-arrow">&rarr;</span><span class="ex-chip">4</span><span class="ex-arrow">&rarr;</span><span class="ex-chip">5</span></div>
+      <div class="ex-table-cap">Step-by-step queue trace (dequeue = visit, front is dequeued next):</div>
+      <div class="ex-table-wrap">
+        <table class="ex-table">
+          <tr><th>Step</th><th>Visit</th><th>Queue (front &rarr; back)</th><th>Visited set</th></tr>
+          <tr><td>1</td><td><span class="ex-visit">0</span></td><td>[ 1, 2 ]</td><td>0, 1, 2</td></tr>
+          <tr><td>2</td><td><span class="ex-visit">1</span></td><td>[ 2, 3, 4 ]</td><td>0, 1, 2, 3, 4</td></tr>
+          <tr><td>3</td><td><span class="ex-visit">2</span></td><td>[ 3, 4 ]</td><td>0, 1, 2, 3, 4</td></tr>
+          <tr><td>4</td><td><span class="ex-visit">3</span></td><td>[ 4, 5 ]</td><td>0, 1, 2, 3, 4, 5</td></tr>
+          <tr><td>5</td><td><span class="ex-visit">4</span></td><td>[ 5 ]</td><td>all 6</td></tr>
+          <tr><td>6</td><td><span class="ex-visit">5</span> <span class="ex-found">&check; found</span></td><td>[ &nbsp; ]</td><td>all 6</td></tr>
+        </table>
+      </div>
       <div class="ex-result">Visiting order: <b>0 &rarr; 1 &rarr; 2 &rarr; 3 &rarr; 4 &rarr; 5</b>. Target <b>5</b> found at the last level.</div>
     </div>
   </div>
@@ -1444,6 +1497,18 @@ int main() {
       </div>
       <div class="ex-note">DFS uses <b>recursion (a stack)</b> — go as deep as possible down one branch before backtracking. Assuming neighbours are taken in increasing order:</div>
       <div class="ex-order"><span class="ex-chip">0</span><span class="ex-arrow">&rarr;</span><span class="ex-chip">1</span><span class="ex-arrow">&rarr;</span><span class="ex-chip">3</span><span class="ex-arrow">&rarr;</span><span class="ex-chip">5</span><span class="ex-arrow">&rarr;</span><span class="ex-chip">4</span><span class="ex-arrow">&rarr;</span><span class="ex-chip">2</span></div>
+      <div class="ex-table-cap">Step-by-step recursion (call) stack trace &mdash; top of stack = current node:</div>
+      <div class="ex-table-wrap">
+        <table class="ex-table">
+          <tr><th>Step</th><th>Visit</th><th>Call stack (bottom &rarr; top)</th><th>Action</th></tr>
+          <tr><td>1</td><td><span class="ex-visit">0</span></td><td>0</td><td class="ex-dim">start</td></tr>
+          <tr><td>2</td><td><span class="ex-visit">1</span></td><td>0 &rsaquo; 1</td><td class="ex-dim">go deeper</td></tr>
+          <tr><td>3</td><td><span class="ex-visit">3</span></td><td>0 &rsaquo; 1 &rsaquo; 3</td><td class="ex-dim">go deeper</td></tr>
+          <tr><td>4</td><td><span class="ex-visit">5</span></td><td>0 &rsaquo; 1 &rsaquo; 3 &rsaquo; 5</td><td><span class="ex-found">&check; target found</span></td></tr>
+          <tr><td>5</td><td><span class="ex-visit">4</span></td><td>0 &rsaquo; 1 &rsaquo; 4</td><td class="ex-dim">backtrack to 1, next neighbour</td></tr>
+          <tr><td>6</td><td><span class="ex-visit">2</span></td><td>0 &rsaquo; 2</td><td class="ex-dim">backtrack to 0, next neighbour</td></tr>
+        </table>
+      </div>
       <div class="ex-result">Visiting order: <b>0 &rarr; 1 &rarr; 3 &rarr; 5 &rarr; 4 &rarr; 2</b>. Dives 0&rarr;1&rarr;3&rarr;5 first, backtracks, then reaches 4 and 2.</div>
     </div>
   </div>
